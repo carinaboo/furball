@@ -1,26 +1,27 @@
 class AnimalController < ApplicationController
 
-	# before_filter :cors_preflight_check
+	skip_before_filter :verify_authenticity_token
+	before_filter :cors_preflight_check
 	after_filter :cors_set_access_control_headers
 
 	def cors_set_access_control_headers
 		# allow CORS (cross origin resource sharing)
 		headers['Access-Control-Allow-Origin'] = '*'
-		# headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
-		# headers['Access-Control-Max-Age'] = "1728000"
-		# headers['Access-Control-Request-Method'] = '*'
-		# headers['Access-Control-Allow-Headers'] = 'Origin, Content-type, Accept, Authorization'
+		headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
+		headers['Access-Control-Max-Age'] = "1728000"
+		headers['Access-Control-Request-Method'] = '*'
+		headers['Access-Control-Allow-Headers'] = 'Origin, Content-type, Accept, Authorization'
 	end
 
-	# def cors_preflight_check
-	#     if request.method == :options
-	# 		headers['Access-Control-Allow-Origin'] = '*'
-	# 		headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
-	# 		headers['Access-Control-Allow-Headers'] = 'X-Requested-With, X-Prototype-Version, X-CSRF-Token'
-	# 		headers['Access-Control-Max-Age'] = '1728000'
-	# 		render :text => '', :content_type => 'text/plain'
-	#     end
-	# end
+	def cors_preflight_check
+	    if request.method == :options
+			headers['Access-Control-Allow-Origin'] = '*'
+			headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
+			headers['Access-Control-Allow-Headers'] = 'X-Requested-With, X-Prototype-Version, X-CSRF-Token'
+			headers['Access-Control-Max-Age'] = '1728000'
+			render :text => '', :content_type => 'text/plain'
+	    end
+	end
 
 	def index
 	
@@ -38,6 +39,7 @@ class AnimalController < ApplicationController
 		pet = animals[rand(animals.length)]
 		pet_picture = domain + path + pictures[pet.to_sym][rand(pictures[pet.to_sym].length)]
 		pet_age = rand(11) + 1
+		headers['Access-Control-Allow-Origin'] = '*'
 		if params[:name]
 			render json: {name: name, animal: pet, picture: pet_picture, age: pet_age}
 		else 
