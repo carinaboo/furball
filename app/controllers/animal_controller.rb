@@ -10,7 +10,7 @@ class AnimalController < ApplicationController
 		headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
 		headers['Access-Control-Max-Age'] = "1728000"
 		headers['Access-Control-Request-Method'] = '*'
-		headers['Access-Control-Allow-Headers'] = 'Origin, Content-type, Accept, Authorization'
+		headers['Access-Control-Allow-Headers'] = 'Origin, Content-type, Accept, Authorization, X-Requested-With, X-Prototype-Version, X-CSRF-Token'
 	end
 
 	def cors_preflight_check
@@ -39,7 +39,6 @@ class AnimalController < ApplicationController
 		pet = animals[rand(animals.length)]
 		pet_picture = domain + path + pictures[pet.to_sym][rand(pictures[pet.to_sym].length)]
 		pet_age = rand(11) + 1
-		headers['Access-Control-Allow-Origin'] = '*'
 		if params[:name]
 			render json: {name: name, animal: pet, picture: pet_picture, age: pet_age}
 		else 
