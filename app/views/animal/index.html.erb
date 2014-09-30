@@ -6,11 +6,11 @@
 <script type="text/javascript">
 $.ajax({
 	type: 'POST',
-    url: '/adopt',
-    data: JSON.stringify({name: "Cuddles"}), // data you're sending
-    contentType: "application/json", // data type you're sending
-    dataType: "json", // data you expect to return from server
-    success: function(data) { // callback when server returns 200 OK
+    url: 'http://adoptafurball.herokuapp.com/adopt',
+    data: JSON.stringify({name: "Cuddles"}),
+    contentType: "application/json",
+    dataType: "json",
+    success: function(data) {
     	console.log(data);
     }
 });
