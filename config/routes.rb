@@ -6,10 +6,11 @@ Warmup::Application.routes.draw do
   # get '/users', to: 'user#index', as: :user_form
   # post '/users', to: 'user#index', as: :user_index
 
-  get '/', to: 'home#index', as: :home
+  # get '/', to: 'home#index', as: :home
 
-  get '/animals', to: 'animal#index'
-  post '/animals/adopt', to: 'animal#adopt'
+  get '/', to: 'animal#index',  as: :home
+  post '/adopt', to: 'animal#adopt', as: :adopt
+  # match '/adopt', to: 'animal#adopt', via: :options
 
   # get '/users', to: 'user#index', as: :users_all
   post '/users/add', to: 'user#add'
