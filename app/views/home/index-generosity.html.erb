@@ -1,0 +1,92 @@
+
+	<title>Counter app</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<style type="text/css">
+		input[type=submit] {
+			background-color: #ADD8E6;
+			border-radius: 5px;
+		}
+		.message {
+			background: yellow;
+			padding: 10px;
+			margin: 10px;
+			width: 600px;
+		}
+	</style>
+	<script type="text/javascript">
+
+
+	$(document).ready(function(){
+		$("#loginButton").click(function(e){
+			e.preventDefault();
+			var username = $("#username").val();
+			var password = $("#password").val();
+			console.log(username);
+			$.ajax({
+				type: 'POST',
+		        url: '/users/login',
+		        data: JSON.stringify({user: username, password: password}),
+		        contentType: "application/json",
+		        dataType: "json",
+		        success: function(data){
+		        	showCountPage(data);
+		        }
+			});
+		});
+
+		var showCountPage = function(data){
+			console.log(data);
+        	var errCode = data['errCode'];
+        	var count = data['count'];
+        	var username = $("#username").val();
+        	if (errCode == 1) {
+        		$("#name").html(username);
+        		$("#count").html(count);
+        	} else {
+        		$("#countScreen").hide();
+        		if (errCode == -1) {
+        			$("#message").html("bad login!");
+        		}
+        	}
+		};
+
+		$("#registerButton").click(function(e){
+			e.preventDefault();
+			var username = $("#username").val();
+			var password = $("#password").val();
+			console.log(username);
+			$.ajax({
+				type: 'POST',
+		        url: '/users/add',
+		        data: JSON.stringify({user: username, password: password}),
+		        contentType: "application/json",
+		        dataType: "json",
+		        success: function(data){
+		        	console.log(data);
+		        }
+			});
+		});
+	});
+
+	</script>
+</head>
+<body>
+	<div id="messageError" class="message">
+		
+	</div>
+	<div id="messageSuccess" class="message">
+		
+	</div>
+	<div id="loginScreen">
+		<form>
+			<input type="text" id="username">
+			<input type="password" id="password">
+			<input type="submit" value="Login" id="loginButton">
+			<input type="submit" value="Register" id="registerButton">
+		</form>
+	</div>
+	<div id="countScreen">
+		Hi <span id="name"></span>! You've logged in 
+		<span id="count"></span> times.
+	</div>
+</body>

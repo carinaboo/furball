@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+</head>
+<script type="text/javascript">
+$(document).ready(function(){
+
+	var messages = {
+		'-1': 'Bad login credentials',
+		'-2': 'User exists',
+		'-3': 'Bad username',
+		'-4': 'Bad password'
+	};
+
+	$('#loginButton').click(
+		function(e) {
+			e.preventDefault();
+			var username = $('#usernameInput').val();
+			var password = $('#passwordInput').val();
+
+			$.ajax({
+				type: 'POST',
+		        url: '/users/login',
+		        data: JSON.stringify({user: username, password: password}),
+		        contentType: "application/json",
+		        dataType: "json",
+		        success: function(data) {
+		        	console.log(data);
+		        	$("#countScreen #name").html(username);
+		        	$("#countScreen #count").html(data['count']);
+		        	var errCode = (data['errCode']).toString();
+		        	$("#message").html(messages[errCode]);
+
+		        	$("#loginScreen").hide();
+		        }
+			});
+		}
+	);
+	$('#registerButton').click(
+		function(e) {
+			e.preventDefault();
+			var username = $('#usernameInput').val();
+			var password = $('#passwordInput').val();
+			console.log("sending"+username+password);
+			$.ajax({
+				type: 'POST',
+		        url: '/users/add',
+		        data: JSON.stringify({user: username, password: password}),
+		        contentType: "application/json",
+		        dataType: "json",
+		        success: function(data) {
+		        	console.log(data);
+		        }
+			});
+		}
+	);
+});
+</script>
+<body>
+	<div id="message"></div>
+	<div id="loginScreen">
+		<form>
+			<input type="text" name="username" placeholder="username" id="usernameInput">
+			<input type="password" name="password" placeholder="password" id="passwordInput">
+			<input type="submit" value="Login" id="loginButton">
+			<input type="submit" value="Register" id="registerButton">
+		</form>
+	</div>
+	<div id="countScreen">
+		Hi <span id="name"></span>! You've logged in <span id="count"></span> times!
+	</div>
+</body>
+</html>

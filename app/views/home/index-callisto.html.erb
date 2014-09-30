@@ -1,0 +1,80 @@
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#loginButton').click(function(e){
+		e.preventDefault();
+		var username = $('#username').val();
+		var password = $('#password').val();
+		console.log(username);
+		$.ajax({
+			type: 'POST',
+			url: 'http://carinaboowarmup.herokuapp.com/users/login',
+	        data: JSON.stringify({user: username, password: password}),
+	        contentType: 'application/json',
+	        dataType: 'jsonp',
+	        success: function(data) {
+	        	// $('#puppy').attr('src', 'http://placekitten.com.s3.amazonaws.com/homepage-samples/200/287.jpg');
+	        	// $('#loginScreen').css('display','none');
+	        	console.log(data);
+	        	if (data['errCode'] == 1) {
+	        		$('#count').html(data['count']);
+	        		$('#name').html(username);
+	        	} else if (data['errCode'] == -1) {
+	        		// show a message for bad login
+
+	        	}
+	        }
+		});
+		$.ajax({
+			type: 'POST',
+			url: 'http://carinaboowarmup.herokuapp.com/users/login',
+	        data: JSON.stringify({user: "carinaboo@berkeley.edu", password: "1234567890"}),
+	        contentType: 'application/json',
+	        dataType: 'jsonp',
+	        success: function(data) {
+	        	console.log(data);
+	        }
+		});
+	});
+	$('#registerButton').click(function(e){
+		e.preventDefault();
+		var username = $('#username').val();
+		var password = $('#password').val();
+		console.log(username);
+		$.ajax({
+			type: 'POST',
+			url: '/users/add',
+	        data: JSON.stringify({user: username, password: password}),
+	        contentType: 'application/json',
+	        dataType: 'jsonp',
+	        success: function(data) {
+	        	console.log(data);
+	        }
+		});
+	});
+});
+</script>
+
+<div id="message">
+	Here will be where all the messages show :D
+</div>
+<div id="loginScreen">
+	<img id="puppy" src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTu2JoVsk5WS6ZensA2mRk9YnoE2zhNHqKQxWUUF9qJVAGjrApb4KKbKg">
+	<form>
+		<input type="text" placeholder="username" id="username">
+		<input type="password" placeholder="password" id="password">
+		<input type="submit" value="Login" id="loginButton">
+		<input type="submit" value="Register" id="registerButton">
+	</form>
+</div>
+<div id="countScreen">
+	Hello there <span id="name"></span>! You have logged in <span id="count"></span> times!
+</div>
+
+
+
+
+
+
+

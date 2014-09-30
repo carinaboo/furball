@@ -1,0 +1,57 @@
+function Initialize() {
+ 
+  var triggers = ScriptApp.getProjectTriggers();
+ 
+  for(var i in triggers) {
+    ScriptApp.deleteTrigger(triggers[i]);
+  }
+  
+  ScriptApp.newTrigger("EmailFormResponse")
+  .forSpreadsheet(SpreadsheetApp.getActiveSpreadsheet())
+  .onFormSubmit()
+  .create();
+  
+}
+
+function EmailFormResponse(e) 
+{  
+  try 
+  {      
+    // Send To
+    // For current Google user, use email = Session.getActiveUser().getEmail();
+    var email = "carinab92@gmail.com";
+    
+    // Email Subject
+    var subject = "[Testing] CS 169 Lecture Feedback";  
+    
+    var s = SpreadsheetApp.getActiveSheet();
+    var columns = s.getRange(1,1,1,s.getLastColumn()).getValues()[0];    
+    var message = "";
+    
+    // Excluded form fields
+    var excludedColumns = ["Timestamp", "Username"];
+    
+    // Only include form fields that are not blank
+    for ( var keys in columns ) {
+      var key = columns[keys];
+      if ( excludedColumns.indexOf(key) < 0 ) {
+        if ( e.namedValues[key] && (e.namedValues[key] != "") ) {
+          message += key + '\n'+ e.namedValues[key] + "\n\n"; 
+        }
+      }
+    }
+        
+    // This is the MailApp service of Google Apps Script
+    // that sends the email. You can also use GmailApp for HTML Mail.
+    
+    var options = {
+      name: 'CS 169 Auto-Mailer'
+    };
+    
+    GmailApp.sendEmail(email, subject, message, options); 
+    
+  } catch (e) {
+    Logger.log(e.toString());
+  }
+    
+}
