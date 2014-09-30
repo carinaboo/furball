@@ -1,17 +1,94 @@
-<div class="main">
-	<h1>Let's adopt some cuddly animals!</h1>
+<style type="text/css">
+body {
+	font-family: Verdana, sans-serif;
+}
+input {
+	border: 2px solid #CCC;
+	color: #34495E;
+	font-size: 14px;
+	padding: 8px 5px;
+	border-radius: 6px;
+}
+input[type=submit] {
+	border: 2px solid hotpink;
+	background-color: hotpink;
+}
+input[type=submit]:hover {
+	background-color: #FF90C7;
+}
+#pet-screen .info span {
+	font-weight: bold; 
+}
+</style>
+
+<div id="adopt-screen">
+	<form>
+		<label>Name your new buddy!</label>
+		<input type="text" name="name" placeholder="pet name">
+		<input class="adopt-button btn btn-primary" type="submit" value="Adopt a furball">
+	</form>
+</div>
+<div id="pet-screen">
+	<h1 class="name"></h1>
+	<p class="info">He's a <span class="animal"></span>, who is <span class="age"></span> months old.</p>
+	<p class="warning"></p>
+	<img class="picture" src="">
 </div>
 
-
 <script type="text/javascript">
-$.ajax({
-	type: 'POST',
-    url: 'http://adoptafurball.herokuapp.com/adopt',
-    data: JSON.stringify({name: "Cuddles"}),
-    contentType: "application/json",
-    dataType: "json",
-    success: function(data) {
-    	console.log(data);
-    }
+$(document).ready(function(){
+
+	$('#pet-screen').hide();
+
+	$('#adopt-screen .adopt-button').click(function(e){
+		e.preventDefault();
+		var name = $('#adopt-screen input[name=name]').val();
+		console.log(name);
+		$.ajax({
+			type: 'POST',
+		    url: 'http://adoptafurball.herokuapp.com/adopt',
+		    data: JSON.stringify({name: name}),
+		    contentType: 'application/json',
+		    dataType: 'json',
+		    success: function(data) {
+		    	console.log(data);
+		    	console.log(data.animal);
+		    	$('#pet-screen .name').html(data.name);
+		    	$('#pet-screen .animal').html(data.animal);
+		    	$('#pet-screen .age').html(data.age);
+		    	$('#pet-screen .picture').attr('src', data.picture);
+		    	if (data['age'] < 6) {
+		    		$('#pet-screen .warning').html('Please take extra good care of this wittle guy!');
+		    	} else {
+		    		$('#pet-screen .warning').html('This guy is old enough to ramble on his own.');
+		    	}
+		    	$('#pet-screen').show();
+		    }
+		});
+	});
+
+	/*
+	$.ajax({
+		type: 'POST',
+	    url: 'http://adoptafurball.herokuapp.com/adopt',
+	    data: JSON.stringify({name: "Cuddles"}),
+	    contentType: 'application/json',
+	    dataType: 'json',
+	    success: function(data) {
+	    	console.log(data);
+	    }
+	});
+
+	$.ajax({
+		type: 'POST',
+	    url: 'http://carinaboowarmup.herokuapp.com/users/login',
+	    data: JSON.stringify({user: "carinabooooo", password: "12345"}),
+	    contentType: 'application/json',
+	    dataType: 'json',
+	    success: function(data) {
+	    	console.log(data);
+	    }
+	});
+	*/
 });
 </script>
