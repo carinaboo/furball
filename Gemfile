@@ -6,13 +6,13 @@ ruby '2.0.0'
 gem 'rails', '4.0.2'
 
 # Use postgres as the database for Active Record on production, and sqlite3 on dev and test
-gem 'sqlite3'
-# group :development, :test do
-#   gem 'sqlite3'
-# end
-# group :production do
-#   gem 'pg'
-# end
+# gem 'sqlite3'
+group :development, :test do
+  gem 'sqlite3'
+end
+group :production do
+  gem 'pg'
+end
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
